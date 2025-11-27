@@ -3,14 +3,15 @@
     import {Tooltip} from "react-tooltip";
     import {useGSAP} from "@gsap/react";
     import gsap from "gsap";
+    import type { DockApp } from "../@types";
 
     export const Dock = () => {
-        const dockRef = useRef(null);
+        const dockRef = useRef<HTMLDivElement | null>(null);
 
         useGSAP(() => {
             const dock = dockRef.current;
             if(!dock) return () => {};
-            const icons = dock.querySelectorAll(".dock-icon");
+            const icons = dock.querySelectorAll<HTMLButtonElement>(".dock-icon");
 
 
             const animateIcons = (mouseX: number) => {
@@ -35,7 +36,7 @@
                 animateIcons(e.clientX - left);
             }
 
-            const resetIcons = () => icons.forEach(icon => gsap.to(icon,{
+            const resetIcons = () => icons.forEach((icon) => gsap.to(icon,{
                 scale: 1,
                 y: 0,
                 duration: 0.25,
@@ -49,7 +50,7 @@
                 dock.removeEventListener("mouseleave", resetIcons);
             }
         },[])
-        const toogleApp = (app) => {
+        const toogleApp = (app: Pick<DockApp, "id" | "canOpen">) => {
             //TODO: Implement opening app
         }
         return (
