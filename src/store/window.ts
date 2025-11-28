@@ -27,7 +27,7 @@ export const useWindowStore = create<WindowStore>()(
         openWindow: (windowKey, data = null) =>
             set((state) => {
                 if (!state.windows[windowKey]) {
-                    console.error(`Window ${windowKey} not found in WINDOW_CONFIG`)
+                    return console.error(`Window ${windowKey} not found in WINDOW_CONFIG`)
                 }
                 const win = state.windows[windowKey];
                 win.isOpen = true;
@@ -38,7 +38,7 @@ export const useWindowStore = create<WindowStore>()(
         closeWindow: (windowKey) =>
             set((state) => {
                 if (!state.windows[windowKey]) {
-                    console.error(`Window ${windowKey} not found in WINDOW_CONFIG`)
+                    return console.error(`Window ${windowKey} not found in WINDOW_CONFIG`)
                 }
                 const win = state.windows[windowKey];
                 win.isOpen = false;
@@ -47,8 +47,9 @@ export const useWindowStore = create<WindowStore>()(
             }),
         focusWindow: (windowKey) =>
             set((state) => {
+
                 if (!state.windows[windowKey]) {
-                    console.error(`Window ${windowKey} not found in WINDOW_CONFIG`)
+                    return console.error(`Window ${windowKey} not found in WINDOW_CONFIG`)
                 }
                 const win = state.windows[windowKey];
                 win.zIndex = state.nextZIndex++;
