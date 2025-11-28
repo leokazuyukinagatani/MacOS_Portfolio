@@ -4,10 +4,11 @@
     import {useGSAP} from "@gsap/react";
     import gsap from "gsap";
     import type { DockApp } from "../@types";
+    import {useWindowStore} from "#store/window.ts";
 
     export const Dock = () => {
         const dockRef = useRef<HTMLDivElement | null>(null);
-
+        const { windows, openWindow, closeWindow } = useWindowStore();
         useGSAP(() => {
             const dock = dockRef.current;
             if(!dock) return () => {};
@@ -50,8 +51,14 @@
                 dock.removeEventListener("mouseleave", resetIcons);
             }
         },[])
-        const toogleApp = (app: Pick<DockApp, "id" | "canOpen">) => {
-            //TODO: Implement opening app
+        const toogleApp = (_app: Pick<DockApp, "id" | "canOpen">) => {
+            if (!_app.canOpen) return;
+            const key = _app.id as keyof typeof windows;
+            const win = windows[key];
+            if (!win) return;
+            if (win.isOpen) closeWindow(key);
+            else openWindow(key);
+
         }
         return (
             <section id="dock">
